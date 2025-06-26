@@ -1,0 +1,113 @@
+{
+  "name": "AI Development",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "installMaven": true,
+      "installGradle": true
+    },
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // general
+        "shd101wyy.markdown-preview-enhanced",
+        "yzhang.markdown-all-in-one",
+        "takumii.markdowntable",
+        "DavidAnson.vscode-markdownlint",
+        "jebbs.plantuml",
+        "redhat.vscode-yaml",
+        "hediet.vscode-drawio",
+        "ms-vscode.vscode-json",
+        "streetsidesoftware.code-spell-checker",
+        "ms-vscode.sublime-commands",
+        // frontend
+        "george-alisson.html-preview-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "Vue.volar",
+        "ms-vscode.vscode-html-language-features",
+        // java
+        "ms-vscode.vscode-java-pack",
+        "vscjava.vscode-spring-boot-dashboard",
+        "vscjava.vscode-spring-initializr",
+        // python
+        "ms-python.python",
+        "ms-python.flake8",
+        "ms-python.black-formatter",
+        "ms-python.django",
+        "ms-toolsai.jupyter",
+        "ms-python.pylint",
+        // ai agent
+        "RooVeterinaryInc.roo-cline",
+        // database
+        "cweijan.vscode-database-client2"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "python.defaultInterpreterPath": "/usr/local/bin/python3",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "java.jdt.ls.java.home": "/usr/local/sdkman/candidates/java/current",
+        "java.configuration.runtimes": [
+          {
+            "name": "JavaSE-17",
+            "path": "/usr/local/sdkman/candidates/java/current"
+          }
+        ]
+      }
+    }
+  },
+
+  "postCreateCommand": "pip install --upgrade pip && pip install django fastapi streamlit uvicorn LightGBM && npm install -g @google/gemini-cli",
+
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
+  },
+
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+  ],
+
+  "workspaceFolder": "/workspace",
+
+  "remoteUser": "vscode",
+
+  "forwardPorts": [
+    8000,
+    8080,
+    8501
+  ],
+
+  "portsAttributes": {
+    "8000": {
+      "label": "Django/FastAPI Server"
+    },
+    "8080": {
+      "label": "Spring Boot Server"
+    },
+    "8501": {
+      "label": "Streamlit App"
+    }
+  },
+
+  "postStartCommand": "echo 'Container started. Run \"claude auth\" to authenticate with Claude Code.'"
+}
