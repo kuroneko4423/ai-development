@@ -40,6 +40,7 @@
         "ms-vscode.vscode-json",
         "streetsidesoftware.code-spell-checker",
         "ms-vscode.sublime-commands",
+        "mechatroner.rainbow-csv",
         // frontend
         "george-alisson.html-preview-vscode",
         "ms-vscode.vscode-typescript-next",
