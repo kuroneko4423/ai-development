@@ -60,13 +60,17 @@
         // ai agent
         "RooVeterinaryInc.roo-cline",
         // database
-        "cweijan.vscode-database-client2"
+        "cweijan.vscode-database-client2",
+        // mobile
+        "Dart-Code.dart-code",
+        "Dart-Code.flutter"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
         "python.defaultInterpreterPath": "/usr/local/bin/python3",
         "python.linting.enabled": true,
         "python.linting.pylintEnabled": true,
+        "dart.flutterSdkPath": "/opt/flutter",
         "java.jdt.ls.java.home": "/usr/local/sdkman/candidates/java/current",
         "java.configuration.runtimes": [
           {
@@ -78,10 +82,12 @@
     }
   },
 
-  "postCreateCommand": "pip install --upgrade pip && pip install django fastapi streamlit uvicorn LightGBM && npm install -g @google/gemini-cli",
+  "postCreateCommand": "pip install --upgrade pip && pip install django fastapi streamlit uvicorn LightGBM && npm install -g @google/gemini-cli && sudo apt-get update && sudo apt-get install -y wget curl unzip ninja-build libgtk-3-dev && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list && sudo apt-get update && sudo apt-get install -y google-chrome-stable && curl -fsSL https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.5-stable.tar.xz | sudo tar -xJ -C /opt && sudo chown -R $(whoami) /opt/flutter && sudo mkdir -p /opt/android-sdk/cmdline-tools && cd /opt/android-sdk/cmdline-tools && sudo wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip && sudo unzip -q commandlinetools-linux-11076708_latest.zip && sudo mv cmdline-tools latest && sudo rm commandlinetools-linux-11076708_latest.zip && sudo chown -R $(whoami) /opt/android-sdk && /opt/flutter/bin/flutter config --no-analytics && /opt/flutter/bin/flutter doctor",
 
   "remoteEnv": {
-    "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
+    "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin:/opt/flutter/bin:/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools",
+    "CHROME_EXECUTABLE": "/usr/bin/google-chrome",
+    "ANDROID_HOME": "/opt/android-sdk"
   },
 
   "mounts": [
@@ -93,12 +99,16 @@
   "remoteUser": "vscode",
 
   "forwardPorts": [
+    3000,
     8000,
     8080,
     8501
   ],
 
   "portsAttributes": {
+    "3000": {
+      "label": "Flutter Web Dev Server"
+    },
     "8000": {
       "label": "Django/FastAPI Server"
     },
